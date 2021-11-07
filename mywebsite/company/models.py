@@ -10,3 +10,12 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+class ContactList(models.Model):  # Should be ContactList
+    title = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    detail = models.TextField(null=True, blank=True)
+    complete = models.BooleanField(default=False)  # ถ้า user ไม่ได้ใส่อะไรมา ก็จะเป้น False อยู่แล้ว
+
+    def __str__(self):
+        return self.title
+    
