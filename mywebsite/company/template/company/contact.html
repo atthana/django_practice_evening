@@ -5,8 +5,10 @@
 <center>
     <h1>ติดต่อเรา</h1>
 </center>
-    <!-- <form action="/action_page.php"> -->
 
+{% if message %}
+    <br><h3>{{ message }}</h3>
+{% else %}
     <form method="POST">
         {% csrf_token %}
         <div class="form-group">
@@ -27,6 +29,6 @@
         <button type="submit" class="btn btn-primary">ส่งข้อความไปหาคิว</button>
     </form>
 
-
+{% endif %}
 
 {% endblock content %}
