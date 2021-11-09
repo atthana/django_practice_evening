@@ -3,21 +3,18 @@ from django.shortcuts import render
 
 from django.http import HttpResponse
 from .models import ContactList, Product
+from songline import Sendline
 
-def Home(request): # ต้องใส่ request เข้าไปด้วยนะ เพราะ render ต้องการ request เป็นส่วนประกอบ
-
+def Home(request):
     allproduct = Product.objects.all()  # SELECT * from product มันคือแบบนี้นะใน SQL
     context = {'allproduct': allproduct}
-
     return render(request, 'company/home.html', context)
 
 def AboutUs(request):
     return render(request, 'company/aboutus.html')
 
 def ContactUs(request):
-
     context = {} # สิ่งที่จะแนบไป คือเวลาเข้ามาในหน้านี้ปกติ จะทำบรรทัดนี้
-
     if request.method == 'POST':
         data = request.POST.copy()  # data จะเป็น dictinary นะ
         title = data.get('title')  # ชื่อพวกนี้ควรเหมือนกับ id ใน html นะ
@@ -29,14 +26,20 @@ def ContactUs(request):
         print(email)
         print(detail)
         print('------------')  # ปกติควร print ก่อนนะ พอได้ข้อมูลแล้วค่อยทำการ save
+        if title == '' and email == '':
+            context['message'] = 'เทอๆ กรอกหัวข้อและอีเมลล์ด้วยจ้า เพราะจะส่งคำตอบไม่ได้'
+            return render(request, 'company/contact.html', context=context)  
 
-        # ContactUs(title=title, email=email, detail=detail).save()  # ทำแบบนี้ก็ save ได้เหมือนกันนะ ลด code ให้เหลือบรรทัดเดียวเลย แต่จะไม่ยืดหยุ่นเหมือนแบบหลายบรรทัดข้างล่างที่มันใส่เงื่อนไขแต่ละ field ได้
-        
         newrecord = ContactList()
-        newrecord.title = title  # เพราะเราสร้าง model แล้ว เลยใช้ .title ได้เลย เหมือนกับ Flutter ที่สร้าง model นั่นแหละ
-        newrecord.email = email  # พวกนี้คือการใส่ค่าเข้าไปใน model น่ั่นแหละ
+        newrecord.title = title
+        newrecord.email = email
         newrecord.detail = detail
-        newrecord.save()  # พอใช้ .save() ก็จะ save ข้อมูลเข้า db นะ
+        newrecord.save()
         context['message'] = 'ตอนนี้คิวได้รับข้อความแล้ว เด่วขออ่านก่อนนะแล้วจะตอบกลับภายใน 5 ปี'
+
+        # ส่ง Line
+        token = '8hd3NiwuQQd0yELpCf1BjLSlO7ljAXsFfRG1f8tfn4k'
+        m = Sendline(token)
+        m.sendtext('\nหัวข้อ: {}\nemail: {}\n>>> {}'.format(title, email, detail))
 
     return render(request, 'company/contact.html', context=context)
