@@ -43,3 +43,22 @@ def ContactUs(request):
         m.sendtext('\nหัวข้อ: {}\nemail: {}\n>>> {}'.format(title, email, detail))
 
     return render(request, 'company/contact.html', context=context)
+
+from django.contrib.auth import authenticate, login
+
+def Login(request):
+    context = {}
+    
+    if request.method == 'POST':
+        data = request.POST.copy()
+        username = data.get('username')
+        password = data.get('password')
+        try:
+            user = authenticate(username=username, password=password)  # เป็นการ get password จากตัว form
+            print('-----user-----')
+            print(user)
+            login(request, user)  # มาจาก lib นะ
+        except:
+            context['message'] = 'อีเมลล์หรือรหัสผ่านไม่ถูกต้อง กรุณาติดต่อ admin'
+
+    return render(request, 'company/login.html', context=context)

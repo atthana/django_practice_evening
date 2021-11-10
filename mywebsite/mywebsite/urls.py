@@ -15,8 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('company.urls'))  # Link project ไปยัง app นะ
+    path('', include('company.urls')),  # Link project ไปยัง app นะ
+    path('login/', views.LoginView.as_view(template_name='company/login.html'), name='login'),
+    path('logout/', views.LogoutView.as_view(template_name='company/logout.html'), name='logout'),  # ของ logout ใส่ชื่อเล่นแบบนี้ได้เลย แล้วก้อ logout.html ไม่ต้องมีไฟล์นี้ก้ได้นะ เพราะเวลา logout มันจะวิ่งไปที่ login page ตามที่เรากำหนดใน settings.py แล้ว มันจะไม่มาถึงนี่
 ]

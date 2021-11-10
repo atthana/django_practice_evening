@@ -127,3 +127,7 @@ STATICFILES_DIRS = [
     r"/Users/atthana/Desktop/Private_Q/Trainings/3_django_camp_uncle/mywebsite_ep1/mywebsite/static/python_files",
     # "//Users//atthana//Desktop//Private_Q//Trainings//3_django_camp_uncle//mywebsite_ep1//mywebsite//static//python_files"
 ]
+
+LOGIN_URL = 'login'  # คำว่า login ตรงนี้มาจาก urls.py นะ ที่เป็นชื่อเล่นนั่นแหละ (ตัวแปรด้านหน้าต้องแบบนี้เท่านั้นนะ)
+LOGIN_REDIRECT_URL = 'home-page'  # ถ้า login สำเร็จไปหน้านี้ 
+LOGOUT_REDIRECT_URL = 'login'  # ถ้า logout จะให้ไปหน้าไหน
